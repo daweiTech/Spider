@@ -1,0 +1,61 @@
+_token: v9BQIKbMEm7FnL7vk3AaX8Yh3iYvMgos2ieEHxqG
+password: /b1Ean4b7bteH9OA9V8gPg==
+email: XvvcYLqMwVA1rK5D7AExRA==
+
+ data: {
+            _token: csrfToken,
+            password: aes(form.find("input[name=password]").val()),
+            email: aes(form.find("input[name=email]").val()),
+            // remember: aes($("#auto-login").val()),
+            redirectTo: form.find("input[name=redirectTo]").val(),
+        },
+
+_token:
+var csrfToken = "v9BQIKbMEm7FnL7vk3AaX8Yh3iYvMgos2ieEHxqG"; //固定写死
+_token = csrfToken
+
+password、email:
+//采用aes函数加密，补一下环境就好
+var CryptoJS = require('crypto-js')
+function aes(val) {
+    var k = CryptoJS.enc.Utf8.parse('1234567890abcDEF');
+    var iv = CryptoJS.enc.Utf8.parse('1234567890abcDEF');
+    enc = CryptoJS.AES.encrypt(val, k, {iv: iv, mode:CryptoJS.mode.CBC, padding: CryptoJS.pad.ZeroPadding}).toString();
+    return enc;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+i: 国家
+from: AUTO
+to: AUTO
+smartresult: dict
+client: fanyideskweb
+salt: 16608944850357       时间戳加上0-9的随机数
+sign: ad17526756523d4efea54e456131af27
+lts: 1660894485035         时间戳
+bv: c2777327e4e29b7c4728f13e47bde9a5
+doctype: json
+version: 2.1
+keyfrom: fanyi.web
+action: FY_BY_REALTlME
+
+sign = n.md5("fanyideskweb" + e + i + "Ygy_4c=r#e#4EX^NUGUc5")
+e = nba
+i = 16608951624193     //166开头都是时间戳,这边是时间戳加上0-9的随机数
+bv = n.md5(navigator.appVersion)  md('用户代理')
+

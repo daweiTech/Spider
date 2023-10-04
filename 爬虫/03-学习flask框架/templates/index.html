@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    body{
+        background-color: gray;
+    }
+</style>
+<body>
+
+<table align="center" border="1" cellspacing="0" cellpadding="0" style="margin-top: 100px">
+    <tr>
+        <th>序号</th>
+        <th>姓名</th>
+        <th>年限</th>
+        <th>岗位</th>
+        <th>薪资</th>
+    </tr>
+    <tbody>
+    {% for datum in data.data %}
+    <tr>
+        <td>{{ datum.id }}</td>
+        <td>{{ datum.name }}</td>
+        <td>{{ datum.age }}</td>
+        <td>{{ datum.gw }}</td>
+        <td>{{ datum.xz }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<script src="/static/jquery-1.8.3.min.js"></script>
+
+<script>
+    loaddata();
+    function loaddata(){
+        $.ajax({
+            url:'/api',
+            type:"GET",
+            dataType: 'json'
+        })
+        .done(function (res){
+            console.log(res.data.data)
+        })
+    }
+
+
+
+</script>
+
+<h1>
+    长沙美女好
+</h1>
+
+</body>
+</html>

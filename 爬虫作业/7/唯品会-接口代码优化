@@ -1,0 +1,113 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2022/8/8 10:23
+# @Author  : 4v1d
+# @File    : 唯品会-接口.py
+# @Software: PyCharm
+
+import requests,re
+import pymongo
+
+class Wph(object):
+    def __init__(self,product):
+        self.page_url = 'https://mapi.vip.com/vips-mobile/rest/shopping/pc/search/product/rank'
+        self.product_url = 'https://mapi.vip.com/vips-mobile/rest/shopping/pc/product/module/list/v2'#通过F12观察得出的数据来源链接
+        self.headers =  {
+        'referer': 'https://category.vip.com/suggest.php?keyword=%E5%8F%A3%E7%BA%A2&ff=235%7C12%7C1%7C1&page=3',#构造唯品会自己的身份来请求
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36'
+    }
+        self.client = pymongo.MongoClient('127.0.0.1', port=27017)
+        self.db = self.client.Spiders
+        self.collection = self.db['Wph']  # 都可以
+        self.product = product
+
+    def turn_page(self,start:int,end:int,number:int=120):
+        params = {
+                'callback': 'getMerchandiseIds',
+                'app_name': 'shop_pc',
+                'app_version': '4.0',
+                'warehouse': 'VIP_NH',
+                'fdc_area_id': '104104101',
+                'client': 'pc',
+                'mobile_platform': '1',
+                'province_id': '104104',
+                'api_key': '70f71280d5d547b2a7bb370a529aeea1',
+                'user_id': '',
+                'mars_cid': '1602569282048_0b4beb3d18306a0a0143c359ddb34fae',
+                'wap_consumer': 'a',
+                'standby_id': 'nature',
+                'keyword': '{}'.format(self.product),
+                'lv3CatIds': '',
+                'lv2CatIds': '',
+                'lv1CatIds': '',
+                'brandStoreSns': '',
+                'props': '',
+                'priceMin': '',
+                'priceMax': '',
+                'vipService': '',
+                'sort': '0',
+                'pageOffset': '{}'.format(number),
+                'channelId': '1',
+                'gPlatform': 'PC',
+                'batchSize': '120',
+                '_': '1603721644362',
+            }
+        for page in range(start, end+1, number):#翻页操作，每页120个商品
+            #正则匹配获取每个商品的id
+            response = requests.get(url=self.page_url, params=params, headers=self.headers)
+            ids = re.findall('"pid":"(.*?)"', response.text, re.S)
+            for j in ids:
+                self.get_data(j)
+
+    def get_data(self,num_id):
+         #查询不同的商品只需修改表单数据的'productIds'即可。
+        params = {
+            'callback': 'getMerchandiseDroplets2',
+            'app_name': 'shop_pc',
+            'app_version': '4.0',
+            'warehouse': 'VIP_NH',
+            'fdc_area_id': '104104101',
+            'client': 'pc',
+            'mobile_platform': '1',
+            'province_id': '104104',
+            'api_key': '70f71280d5d547b2a7bb370a529aeea1',
+            'user_id': '',
+            'mars_cid': '1602569282048_0b4beb3d18306a0a0143c359ddb34fae',
+            'wap_consumer': 'a',
+            'productIds': '{}'.format(num_id),#
+            'scene': 'search',
+            'standby_id': 'nature',
+            'extParams': '{"stdSizeVids":"","preheatTipsVer":"3","couponVer":"v2","exclusivePrice":"1","iconSpec":"2x"}',
+            'context': '',
+            '_': '1603721644366',
+        }
+        response_2 = requests.get(url=self.product_url, params=params, headers=self.headers)#请求
+        print(response_2.text)
+        #正则匹配获得的数据
+        titles = re.findall('"title":"(.*?)"', response_2.text, re.S)  # 标题
+        salePrice = re.findall(',"salePrice":"(.*?)",', response_2.text, re.S)  # 售价
+        marketPrice = re.findall('"marketPrice":"(.*?)"', response_2.text, re.S)  # 原价
+        saleDiscount = re.findall('"saleDiscount":"(.*?)"', response_2.text, re.S)  # 折扣
+        smallImage = re.findall('"smallImage":"(.*?)"', response_2.text, re.S)  # 商品图片地址
+
+        #zip() 函数用于将可迭代的对象作为参数，将对象中对应的元素打包成一个个元组，然后返回由这些元组组成的列表
+        lis = zip(titles, salePrice, marketPrice, saleDiscount, smallImage)
+        dit = {}
+        for li in lis:
+            dit['商品名字'] = li[0]
+            dit['售价'] = li[1]
+            dit['原价'] = li[2]
+            dit['折扣'] = li[3]
+            dit['商品图片地址'] = li[4]
+            print(dit)
+            self.save_data(dit)
+
+    def save_data(self,data):
+        self.collection.insert(data)
+
+
+if __name__ == '__main__':
+    s = Wph('手环')
+    s.turn_page(0,1200)
+                
+
+

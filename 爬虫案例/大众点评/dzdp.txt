@@ -1,0 +1,8 @@
+人均
+            <b>￥1&#xe8e3;&#xe6fe;</b>
+
+&#xe8e3 : 0
+&#xe6fe : 9
+
+{'address': 'http://s3plus.meituan.net/v1/mss_73a511b8f91f43d0bdae92584ea6330b/font/2ad5ead5.woff', 'tagName': 'http://s3plus.meituan.net/v1/mss_73a511b8f91f43d0bdae92584ea6330b/font/a5c0cd9c.woff', 'shopNum': 'http://s3plus.meituan.net/v1/mss_73a511b8f91f43d0bdae92584ea6330b/font/2ad5ead5.woff'}
+

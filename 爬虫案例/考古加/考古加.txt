@@ -1,0 +1,22 @@
+[_0x45de72(0xfa7)] = ['send']
+
+
+
+.then方法是进入ajax的重要步骤
+
+_0x37b9b1(_0x49d3c9)[_0x1cc1c9(0x8ba)]
+ƒ then() { [native code] }
+
+
+_0x56dc38['data']   加密数据所在处
+
+
+(_0x3519fc['result']) 解密出来的数据
+
+Object(_0x508e0d['d'])(_0xf60354[0x0], _0x7eba81['result'])   //解密函数
+
+_0xf60354[0x0] == '/api/sku/search'
+
+_0x7eba81['result'] == 加密数据
+
+_0x508e0d['d'] == 加密函数

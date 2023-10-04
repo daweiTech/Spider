@@ -1,0 +1,76 @@
+查询hello
+获取到流量包中以下表单数据
+i: hello
+from: AUTO
+to: AUTO
+smartresult: dict
+client: fanyideskweb
+salt: 16616694553237
+sign: b659cf8e2cea56fd30c57da3041f9437
+lts: 1661669455323
+bv: c2777327e4e29b7c4728f13e47bde9a5
+doctype: json
+version: 2.1
+keyfrom: fanyi.web
+action: FY_BY_REALTlME
+
+观察到，四个参数加密过
+salt: 16616694553237
+sign: b659cf8e2cea56fd30c57da3041f9437
+lts: 1661669455323
+bv: c2777327e4e29b7c4728f13e47bde9a5
+
+
+全局搜索后找到加密点
+    var n = e("./jquery-1.7");
+    e("./utils");
+    e("./md5");
+    var r = function(e) {
+        var t = n.md5(navigator.appVersion)
+          , r = "" + (new Date).getTime()
+          , i = r + parseInt(10 * Math.random(), 10);
+        return {
+            ts: r,
+            bv: t,
+            salt: i,
+            sign: n.md5("fanyideskweb" + e + i + "Ygy_4c=r#e#4EX^NUGUc5")
+        }
+    };
+
+
+整理出来的函数
+var CryptoJS = require('crypto-js')
+var navigator = {
+    'appVersion':'5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36 Edg/104.0.1293.70'
+}
+var e = 'nba';
+var r = "" + (new Date).getTime();
+var i = r + parseInt(10 * Math.random(), 10);
+
+function get_sign(){
+    var sign;
+    var mid = "fanyideskweb" + e + i + "Ygy_4c=r#e#4EX^NUGUc5";
+    sign = CryptoJS.MD5(mid)
+    return sign.toString()
+}
+
+function get_salt(){
+    var salt;
+    salt = i;
+    return salt;
+}
+
+function get_ts(){
+    var ts;
+    ts = r;
+    return ts;
+}
+
+function get_bv(){
+    var bv;
+    bv = CryptoJS.MD5(navigator.appVersion)
+    return bv.toString()
+}
+console.log(get_bv())
+
+

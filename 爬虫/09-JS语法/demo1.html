@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我在做JS测试喔</title>
+</head>
+<body>
+
+<input type="text" id="name">
+<input type="text" id="pwd">
+
+<button id="box" onclick="xl()">登录</button>
+<button type="button" onclick="document.getElementById('demo').innerHTML = Date()">我是一个按钮嘿嘿（悄悄告诉你，可以看时间的喔）</button>
+<p id = 'demo'></p>
+
+<button type="button" onclick="document.getElementById('demo1').innerHTML = '拉拉拉啊啦啦'">来点击我哦，可以变换文字</button>
+<p id = 'demo1'>oh my god</p>
+
+<button type="button" onclick="Change()">来点击我哦，可以修改段落</button>
+<p id = 'demo2'>哈哈哈哈哈哈哈哈哈哈哈</p>
+
+<script>
+    function xl(){
+        var name = document.getElementById('name').value
+        var pwd = document.getElementById('pwd').value
+        console.log(name,pwd)
+    }
+
+    function Change(){
+        document.getElementById('demo2').innerHTML = '段落被更改了哈'
+    }
+</script>
+
+</body>
+</html>
